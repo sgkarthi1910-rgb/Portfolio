@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { personalInfo, skillsData, experienceData, educationData, certificationsData } from '../data/portfolioData';
 import { sound } from '../utils/sound';
+import { LinkedinIcon, DiscordIcon } from './Icons';
 
 export default function ResumeModal({ isOpen, onClose }) {
   const [copied, setCopied] = useState(false);
@@ -50,7 +51,7 @@ export default function ResumeModal({ isOpen, onClose }) {
 ${personalInfo.name}
 ${personalInfo.title}
 Email: ${personalInfo.email} | Location: ${personalInfo.location}
-GitHub: ${personalInfo.github} | LinkedIn: ${personalInfo.linkedin}
+GitHub: ${personalInfo.github} | LinkedIn: ${personalInfo.linkedin} | Discord: ${personalInfo.discord}
 
 PROFILE SUMMARY:
 ${personalInfo.bio.join('\n')}
@@ -157,6 +158,24 @@ ${certificationsData.map((c) => `• ${c.title} (${c.issuer}, ${c.date})`).join(
                 <Globe className="w-3.5 h-3.5 text-cyan-400" />
                 {personalInfo.github}
               </span>
+              <a 
+                href={personalInfo.linkedin} 
+                target="_blank" 
+                rel="noreferrer"
+                className="flex items-center gap-1 hover:text-cyan-300 transition-colors"
+              >
+                <LinkedinIcon className="w-3.5 h-3.5 text-cyan-400" />
+                LinkedIn
+              </a>
+              <a 
+                href={personalInfo.discord} 
+                target="_blank" 
+                rel="noreferrer"
+                className="flex items-center gap-1 hover:text-cyan-300 transition-colors"
+              >
+                <DiscordIcon className="w-3.5 h-3.5 text-indigo-400" />
+                Discord
+              </a>
             </div>
           </div>
 

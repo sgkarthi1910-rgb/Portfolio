@@ -103,7 +103,7 @@ export default function CommandPalette({
     {
       id: 'github',
       title: 'Open GitHub Profile',
-      subtitle: 'github.com/SelvaGuruKarthikeyan',
+      subtitle: 'github.com/sgkarthi1910-rgb',
       icon: ExternalLink,
       category: 'External',
       perform: () => window.open(personalInfo.github, '_blank')
@@ -111,10 +111,18 @@ export default function CommandPalette({
     {
       id: 'linkedin',
       title: 'Connect on LinkedIn',
-      subtitle: 'linkedin.com/in/selva-guru-karthikeyan-p',
+      subtitle: 'linkedin.com/in/selva-guru-karthikeyan-409a43376',
       icon: ExternalLink,
       category: 'External',
       perform: () => window.open(personalInfo.linkedin, '_blank')
+    },
+    {
+      id: 'discord',
+      title: 'Connect on Discord',
+      subtitle: 'discord.com/users/1192870797191159829',
+      icon: ExternalLink,
+      category: 'External',
+      perform: () => window.open(personalInfo.discord, '_blank')
     }
   ];
 

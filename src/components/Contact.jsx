@@ -183,7 +183,7 @@ export default function Contact() {
               <div className="relative overflow-hidden p-5 rounded-2xl bg-gradient-to-b from-[#11162b]/90 to-[#090b16]/95 border border-purple-900/40 flex items-center justify-between shadow-lg">
                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-emerald-400/30 to-transparent"></div>
                 <span className="text-xs text-slate-400 font-mono">Design & Code Hubs:</span>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5 sm:gap-3">
                   <a 
                     href={personalInfo.linkedin} 
                     target="_blank" 
@@ -191,6 +191,15 @@ export default function Contact() {
                     className="text-xs text-purple-400 hover:text-cyan-300 font-semibold flex items-center gap-1 cursor-pointer transition-colors"
                   >
                     LinkedIn <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <span className="text-slate-600">•</span>
+                  <a 
+                    href={personalInfo.discord} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="text-xs text-purple-400 hover:text-cyan-300 font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                  >
+                    Discord <ExternalLink className="w-3 h-3" />
                   </a>
                   <span className="text-slate-600">•</span>
                   <a 

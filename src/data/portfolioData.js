@@ -9,7 +9,8 @@ export const personalInfo = {
   email: "sgkarthi1910@gmail.com",
   phone: "",
   github: "https://github.com/sgkarthi1910-rgb",
-  linkedin: "https://linkedin.com/in/selva-guru-karthikeyan-p",
+  linkedin: "https://www.linkedin.com/in/selva-guru-karthikeyan-409a43376",
+  discord: "https://discord.com/users/1192870797191159829",
   twitter: "",
   resumeUrl: "#contact",
   availableForHire: true,
@@ -269,13 +270,15 @@ export const terminalCommands = {
   ],
   contact: [
     "Email    : sgkarthi1910@gmail.com",
-    "LinkedIn : linkedin.com/in/selva-guru-karthikeyan-p",
+    "LinkedIn : linkedin.com/in/selva-guru-karthikeyan-409a43376",
+    "Discord  : https://discord.com/users/1192870797191159829",
     "GitHub   : github.com/sgkarthi1910-rgb",
     "Location : Tamil Nadu, India (IST UTC+5:30)"
   ],
   socials: [
     "GitHub   : https://github.com/sgkarthi1910-rgb",
-    "LinkedIn : https://linkedin.com/in/selva-guru-karthikeyan-p"
+    "LinkedIn : https://www.linkedin.com/in/selva-guru-karthikeyan-409a43376",
+    "Discord  : https://discord.com/users/1192870797191159829"
   ],
   education: [
     "Degree     : B.Tech in Artificial Intelligence & Data Science",

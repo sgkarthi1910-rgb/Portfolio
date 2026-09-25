@@ -3,15 +3,14 @@ import {
   ArrowRight, 
   Terminal, 
   Download, 
-  Mail, 
   Sparkles, 
   Copy, 
   Check, 
   Play, 
-  Code2,
+  Code2, 
   FileText
 } from 'lucide-react';
-import { GithubIcon, LinkedinIcon, TwitterIcon } from './Icons';
+import { GithubIcon, LinkedinIcon, TwitterIcon, DiscordIcon } from './Icons';
 import TiltCard from './TiltCard';
 import CountUp from './CountUp';
 import PopUpCard from './PopUpCard';
@@ -203,6 +202,18 @@ export default profile;`;
                 <LinkedinIcon className="w-4 h-4" />
               </a>
 
+              <a
+                href={personalInfo.discord}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => sound.click()}
+                onMouseEnter={() => sound.hover()}
+                className="p-2.5 rounded-lg bg-[#121524] border border-purple-900/30 text-slate-300 hover:text-white hover:border-indigo-500 hover:bg-indigo-950/40 hover:scale-110 transition-all shadow-sm"
+                aria-label="Discord Profile"
+              >
+                <DiscordIcon className="w-4 h-4" />
+              </a>
+
               {personalInfo.twitter && (
                 <a
                   href={personalInfo.twitter}
@@ -216,16 +227,6 @@ export default profile;`;
                   <TwitterIcon className="w-4 h-4" />
                 </a>
               )}
-
-              <a
-                href={`mailto:${personalInfo.email}`}
-                onClick={() => sound.click()}
-                onMouseEnter={() => sound.hover()}
-                className="p-2.5 rounded-lg bg-[#121524] border border-purple-900/30 text-slate-300 hover:text-white hover:border-pink-500 hover:bg-pink-950/40 hover:scale-110 transition-all shadow-sm"
-                aria-label="Send Email"
-              >
-                <Mail className="w-4 h-4" />
-              </a>
             </div>
 
           </div>

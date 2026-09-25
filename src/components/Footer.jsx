@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowUp, Mail, Heart, Sparkles } from 'lucide-react';
-import { GithubIcon, LinkedinIcon, TwitterIcon } from './Icons';
+import { GithubIcon, LinkedinIcon, TwitterIcon, DiscordIcon } from './Icons';
 import { personalInfo } from '../data/portfolioData';
 import { sound } from '../utils/sound';
 
@@ -63,6 +63,16 @@ export default function Footer() {
               aria-label="LinkedIn"
             >
               <LinkedinIcon className="w-4 h-4" />
+            </a>
+            <a
+              href={personalInfo.discord}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => sound.click()}
+              className="p-2.5 rounded-lg bg-[#111424] text-slate-400 hover:text-white hover:bg-indigo-900/40 border border-purple-900/30 transition-all"
+              aria-label="Discord"
+            >
+              <DiscordIcon className="w-4 h-4" />
             </a>
             {personalInfo.twitter && (
               <a
