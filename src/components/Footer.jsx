@@ -35,11 +35,11 @@ export default function Footer() {
 
           {/* Nav links */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400 font-medium">
-            <a href="#about" onClick={() => sound.click()} className="hover:text-cyan-300 transition-colors">Mission</a>
-            <a href="#skills" onClick={() => sound.click()} className="hover:text-cyan-300 transition-colors">Avionics</a>
-            <a href="#projects" onClick={() => sound.click()} className="hover:text-cyan-300 transition-colors">Flagships</a>
-            <a href="#experience" onClick={() => sound.click()} className="hover:text-cyan-300 transition-colors">Flight Log</a>
-            <a href="#contact" onClick={() => sound.click()} className="hover:text-cyan-300 transition-colors">Quantum Comms</a>
+            <a href="#about" onClick={() => sound.click()} className="hover:text-cyan-300 transition-colors">About</a>
+            <a href="#skills" onClick={() => sound.click()} className="hover:text-cyan-300 transition-colors">Skills</a>
+            <a href="#projects" onClick={() => sound.click()} className="hover:text-cyan-300 transition-colors">Projects</a>
+            <a href="#experience" onClick={() => sound.click()} className="hover:text-cyan-300 transition-colors">Experience</a>
+            <a href="#contact" onClick={() => sound.click()} className="hover:text-cyan-300 transition-colors">Contact</a>
           </div>
 
           {/* Socials & Scroll to Top */}
@@ -64,16 +64,18 @@ export default function Footer() {
             >
               <LinkedinIcon className="w-4 h-4" />
             </a>
-            <a
-              href={personalInfo.twitter}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => sound.click()}
-              className="p-2.5 rounded-lg bg-[#111424] text-slate-400 hover:text-white hover:bg-sky-900/40 border border-purple-900/30 transition-all"
-              aria-label="Twitter"
-            >
-              <TwitterIcon className="w-4 h-4" />
-            </a>
+            {personalInfo.twitter && (
+              <a
+                href={personalInfo.twitter}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => sound.click()}
+                className="p-2.5 rounded-lg bg-[#111424] text-slate-400 hover:text-white hover:bg-sky-900/40 border border-purple-900/30 transition-all"
+                aria-label="Twitter"
+              >
+                <TwitterIcon className="w-4 h-4" />
+              </a>
+            )}
             <a
               href={`mailto:${personalInfo.email}`}
               onClick={() => sound.click()}
@@ -99,7 +101,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} {personalInfo.name}. All rights reserved.
           </div>
           <div className="flex items-center gap-1.5 text-slate-400">
-            <span>Cosmic Flight Telemetry • Operating in Synchronized Galactic Time (IST)</span>
+            <span>Synthesizing Artificial Intelligence, Data Science & Cinematic GUI Architecture • Tamil Nadu, India</span>
           </div>
         </div>
 

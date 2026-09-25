@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Terminal, Volume2, VolumeX, ArrowUpRight, Sparkles, Search } from 'lucide-react';
+import { Menu, X, Terminal, Volume2, VolumeX, ArrowUpRight, Search } from 'lucide-react';
 import { sound } from '../utils/sound';
 import { personalInfo } from '../data/portfolioData';
 
@@ -26,7 +26,7 @@ export default function Navbar({ onOpenTerminal, onOpenCommandPalette }) {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -36,11 +36,11 @@ export default function Navbar({ onOpenTerminal, onOpenCommandPalette }) {
   };
 
   const navLinks = [
-    { label: 'Mission', href: '#about' },
-    { label: 'Avionics', href: '#skills' },
-    { label: 'Flagships', href: '#projects' },
-    { label: 'Flight Log', href: '#experience' },
-    { label: 'Quantum Comms', href: '#contact' }
+    { label: 'About', href: '#about' },
+    { label: 'Skills', href: '#skills' },
+    { label: 'Projects', href: '#projects' },
+    { label: 'Experience', href: '#experience' },
+    { label: 'Contact', href: '#contact' }
   ];
 
   return (
@@ -72,7 +72,7 @@ export default function Navbar({ onOpenTerminal, onOpenCommandPalette }) {
               </span>
               <div className="flex items-center gap-1.5 text-[10px] font-mono tracking-widest text-purple-300/90 whitespace-nowrap mt-0.5 uppercase">
                 <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>ASTRONAUT &amp; ARCHITECT</span>
+                <span>AI &amp; GUI DESIGNER</span>
               </div>
             </div>
           </a>
@@ -126,23 +126,34 @@ export default function Navbar({ onOpenTerminal, onOpenCommandPalette }) {
               }}
               onMouseEnter={() => sound.hover()}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#141829] hover:bg-[#1e233d] border border-purple-800/40 text-purple-300 text-xs font-mono transition-all hover:border-purple-500"
-              title="Open Spacecraft Interactive Mission CLI"
+              title="Open Interactive Developer CLI"
             >
               <Terminal className="w-3.5 h-3.5 text-purple-400" />
-              <span>Mission CLI</span>
+              <span>Dev CLI</span>
             </button>
 
-            {/* Sound FX Toggle */}
+            {/* Cosmic Audio & Ambience Toggle */}
             <button
               onClick={toggleSound}
-              className={`p-2 rounded-lg border transition-all ${
+              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg border transition-all cursor-pointer ${
                 soundEnabled 
-                  ? 'border-cyan-500/50 text-cyan-400 bg-cyan-950/30' 
+                  ? 'border-cyan-400/60 text-cyan-300 bg-cyan-950/40 shadow-[0_0_15px_rgba(56,189,248,0.25)]' 
                   : 'border-slate-800 text-slate-400 hover:text-slate-200 bg-slate-900/50'
               }`}
-              title={soundEnabled ? "Mute interactive audio effects" : "Enable interactive sound effects"}
+              title={soundEnabled ? "Cosmic Space Ambience & Audio: Active (Click to Mute)" : "Cosmic Space Ambience & Audio: Muted (Click to Enable)"}
             >
-              {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+              {soundEnabled ? (
+                <>
+                  <Volume2 className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <div className="flex items-end gap-0.5 h-3">
+                    <span className="w-0.5 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDuration: '0.6s' }} />
+                    <span className="w-0.5 h-3 bg-purple-400 rounded-full animate-bounce" style={{ animationDuration: '0.8s', animationDelay: '0.15s' }} />
+                    <span className="w-0.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style={{ animationDuration: '0.5s', animationDelay: '0.3s' }} />
+                  </div>
+                </>
+              ) : (
+                <VolumeX className="w-4 h-4" />
+              )}
             </button>
 
             {/* Let's Talk CTA */}
@@ -214,10 +225,14 @@ export default function Navbar({ onOpenTerminal, onOpenCommandPalette }) {
             <div className="pt-2 border-t border-purple-900/30 flex items-center justify-between">
               <button
                 onClick={toggleSound}
-                className="flex items-center gap-2 text-xs text-slate-400 py-1"
+                className={`flex items-center gap-2 text-xs px-2.5 py-1 rounded-lg border transition-colors ${
+                  soundEnabled
+                    ? 'border-cyan-500/50 text-cyan-300 bg-cyan-950/30'
+                    : 'border-slate-800 text-slate-400'
+                }`}
               >
                 {soundEnabled ? <Volume2 className="w-4 h-4 text-cyan-400" /> : <VolumeX className="w-4 h-4" />}
-                <span>Sound: {soundEnabled ? 'On' : 'Muted'}</span>
+                <span>Cosmic Audio: {soundEnabled ? 'Active' : 'Muted'}</span>
               </button>
 
               <a

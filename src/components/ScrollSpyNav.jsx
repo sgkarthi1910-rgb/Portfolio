@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { sound } from '../utils/sound';
 
 const SECTIONS = [
-  { id: 'hero', label: 'Launchpad', preview: 'Orbit 01 • Selva Guru Karthikeyan P • Cosmic Systems Architect' },
-  { id: 'about', label: 'Avionics', preview: 'Orbit 02 • Astronaut Profile, Core Avionics & Education' },
-  { id: 'skills', label: 'Propulsion', preview: 'Orbit 03 • 20+ Mastered Flight & Propulsion Subsystems' },
-  { id: 'projects', label: 'Flagships', preview: 'Orbit 04 • Starfleet & Autonomous Orbital Missions' },
-  { id: 'experience', label: 'Flight Log', preview: 'Orbit 05 • Aerospace Milestones & Accreditations' },
-  { id: 'contact', label: 'Quantum Comms', preview: 'Orbit 06 • Deep-Space Encrypted Signal Gateway' }
+  { id: 'hero', label: 'Home', preview: 'Chapter 01 • Selva Guru Karthikeyan P • AI & GUI Designer' },
+  { id: 'about', label: 'About', preview: 'Chapter 02 • Scholar Profile, Philosophy & Education' },
+  { id: 'skills', label: 'Skills', preview: 'Chapter 03 • AI, Deep Learning, Data Science & GUI Toolchains' },
+  { id: 'projects', label: 'Projects', preview: 'Chapter 04 • AI Models, Predictive Dashboards & GUI Portfolios' },
+  { id: 'experience', label: 'Milestones', preview: 'Chapter 05 • Experience, Fellowships & Accreditations' },
+  { id: 'contact', label: 'Contact', preview: 'Chapter 06 • Direct Transmission & Message Uplink' }
 ];
 
 export default function ScrollSpyNav() {

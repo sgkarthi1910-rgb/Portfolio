@@ -15,49 +15,49 @@ import { sound } from '../utils/sound';
 
 const SECTION_INSIGHTS = {
   hero: {
-    title: "Cosmic Identity",
-    tag: "ORBITAL STATUS: NOMINAL",
-    text: "Selva Guru Karthikeyan P • Deep Space Systems Architect & Full-Stack Astronaut.",
+    title: "AI & Design Identity",
+    tag: "STUDIO STATUS: ACTIVE",
+    text: "Selva Guru Karthikeyan P • AI & Data Science Student & GUI / Graphics Designer.",
     icon: Sparkles,
     color: "from-purple-500 to-indigo-500",
     border: "border-purple-500/40"
   },
   about: {
-    title: "Astronaut Profile & Avionics",
-    tag: "FLIGHT CREW DATA",
-    text: "Architecting for interstellar scale, zero-defect gravity, and sub-100ms warp latency.",
+    title: "Student Profile & Philosophy",
+    tag: "AI & GUI DESIGN",
+    text: "Synthesizing machine learning, data science, and cross-platform mobile apps with clean GUI design.",
     icon: Cpu,
     color: "from-cyan-500 to-blue-500",
     border: "border-cyan-500/40"
   },
   skills: {
-    title: "Technical Propulsion Systems",
-    tag: "20+ SUBSYSTEMS ARMED",
-    text: "Battle-tested with React 19, TypeScript, Python, FastAPI, Docker, and AWS Orbital Cloud.",
+    title: "AI, Mobile & GUI Stacks",
+    tag: "CORE CAPABILITIES",
+    text: "Equipped with Python, Scikit-Learn, Flutter, React Native, Figma, Adobe Photoshop, and React 19.",
     icon: Layers,
     color: "from-pink-500 to-purple-500",
     border: "border-pink-500/40"
   },
   projects: {
-    title: "Starfleet & Orbital Missions",
-    tag: "FLIGHT CONFIRMED",
-    text: "Autonomous multi-agent AI, spacecraft telemetry monitors, and distributed DeFi platforms.",
+    title: "Featured Applications",
+    tag: "PROJECTS LIVE",
+    text: "Multilingual SIH AI mobile app, small-business marketing suite, ML pipeline, and Flutter apps.",
     icon: FolderGit2,
     color: "from-emerald-500 to-cyan-500",
     border: "border-emerald-500/40"
   },
   experience: {
-    title: "Flight Log & Milestones",
-    tag: "FLIGHT CERTIFIED",
-    text: "Meta & AWS certified • State Hackathon winner • Stellar engineering leadership.",
+    title: "Practical Work & Milestones",
+    tag: "KEY ACHIEVEMENTS",
+    text: "Smart India Hackathon project developer, mobile application intern, and data science pipelines.",
     icon: Award,
     color: "from-amber-500 to-orange-500",
     border: "border-amber-500/40"
   },
   contact: {
-    title: "Deep-Space Quantum Uplink",
-    tag: "COMMS LINK OPEN",
-    text: "Transmission latency under 24 hrs. Receiving encrypted signals for mission engineering.",
+    title: "Quantum Uplink Dispatch",
+    tag: "COMMS OPEN",
+    text: "Ready for AI research, predictive data science roles, and high-end GUI design commissions.",
     icon: Mail,
     color: "from-purple-500 to-cyan-500",
     border: "border-purple-500/40"
@@ -101,11 +101,11 @@ export default function ScrollInformationHUD() {
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSection}
-          initial={{ opacity: 0, y: 30, scale: 0.9, filter: 'blur(6px)' }}
-          animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-          exit={{ opacity: 0, y: -20, scale: 0.9, filter: 'blur(6px)' }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className={`pointer-events-auto p-4 rounded-2xl bg-[#090b16]/90 backdrop-blur-xl border ${currentInsight.border} shadow-2xl shadow-black/60 relative overflow-hidden`}
+          initial={{ opacity: 0, y: 24, scale: 0.94 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -16, scale: 0.94 }}
+          transition={{ type: "spring", stiffness: 320, damping: 25 }}
+          className={`pointer-events-auto p-4 rounded-2xl bg-[#090b16]/95 backdrop-blur-xl border ${currentInsight.border} shadow-2xl shadow-black/60 relative overflow-hidden transform-gpu will-change-transform`}
         >
           {/* Ambient corner glow */}
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-purple-500/10 to-transparent pointer-events-none" />

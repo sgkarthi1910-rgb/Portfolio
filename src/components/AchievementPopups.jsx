@@ -7,34 +7,34 @@ const ACHIEVEMENTS = [
   {
     threshold: 0.18,
     id: 'ach-1',
-    title: 'Orbit 01 Reached: Escape Velocity',
-    desc: 'Explored Astronaut Selva Guru Karthikeyan P\'s mission profile & engineering philosophy.',
+    title: 'Milestone 01: Student Profile Discovered',
+    desc: 'Explored Selva Guru Karthikeyan P\'s dual-discipline profile in AI & GUI design.',
     icon: Sparkles,
-    badge: '+50 XP MISSION BLUEPRINT'
+    badge: '+50 XP PROFILE'
   },
   {
     threshold: 0.42,
     id: 'ach-2',
-    title: 'Orbit 02 Reached: Avionics Mastered',
-    desc: 'Analyzed 20+ flight-ready propulsion stacks in Frontend, Backend, Cloud & Autonomous AI.',
+    title: 'Milestone 02: Core Technical Stacks Unlocked',
+    desc: 'Explored Python, Scikit-Learn, Flutter, React Native, Figma, and modern frontend capabilities.',
     icon: Zap,
-    badge: '+75 XP AVIONICS'
+    badge: '+75 XP TECH STACKS'
   },
   {
     threshold: 0.68,
     id: 'ach-3',
-    title: 'Orbit 03 Reached: Starfleet Flagships',
-    desc: 'Inspected OmniAI Orbital Command, CloudPulse Radar & distributed planetary systems.',
+    title: 'Milestone 03: Practical Projects & Applications',
+    desc: 'Explored Krishi AgroAssist, AI Business Assistant, Wine Quality ML, and Flutter apps.',
     icon: Trophy,
-    badge: '+100 XP STARFLEET'
+    badge: '+100 XP FEATURED WORK'
   },
   {
     threshold: 0.90,
     id: 'ach-4',
-    title: 'Orbit 04 Reached: Deep-Space Comms',
-    desc: 'Quantum Uplink established. Ready to broadcast collaboration signal or interview invitation!',
+    title: 'Milestone 04: Direct Comm Channel Open',
+    desc: 'Contact link active. Ready to connect with Selva Guru for projects and opportunities!',
     icon: CheckCircle2,
-    badge: '+150 XP QUANTUM LINK'
+    badge: '+150 XP CONNECTED'
   }
 ];
 
@@ -68,16 +68,16 @@ export default function AchievementPopups() {
   }, [unlockedIds]);
 
   return (
-    <div className="fixed top-20 right-6 z-50 pointer-events-none max-w-sm">
+    <div className="fixed top-20 left-4 right-4 sm:left-auto sm:right-6 z-50 pointer-events-none sm:max-w-sm">
       <AnimatePresence>
         {activeToast && (
           <motion.div
             key={activeToast.id}
-            initial={{ opacity: 0, x: 80, scale: 0.9, filter: 'blur(8px)' }}
-            animate={{ opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, x: 60, scale: 0.9, filter: 'blur(8px)' }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="pointer-events-auto p-4 rounded-2xl bg-[#0e1124]/95 backdrop-blur-xl border border-amber-500/50 shadow-2xl shadow-amber-950/40 relative overflow-hidden"
+            initial={{ opacity: 0, x: 50, scale: 0.92 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 40, scale: 0.94 }}
+            transition={{ type: "spring", stiffness: 350, damping: 26 }}
+            className="pointer-events-auto p-4 rounded-2xl bg-[#0e1124]/95 backdrop-blur-xl border border-amber-500/50 shadow-2xl shadow-amber-950/40 relative overflow-hidden transform-gpu will-change-transform"
           >
             {/* Ambient gold glow */}
             <div className="absolute -top-10 -right-10 w-28 h-28 bg-amber-500/20 rounded-full blur-2xl pointer-events-none" />

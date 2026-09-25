@@ -14,15 +14,16 @@ import {
 import { GithubIcon, LinkedinIcon, TwitterIcon } from './Icons';
 import TiltCard from './TiltCard';
 import CountUp from './CountUp';
+import PopUpCard from './PopUpCard';
 import { personalInfo } from '../data/portfolioData';
 import { sound } from '../utils/sound';
 
 const ROLES = [
-  "Cosmic Systems Architect",
-  "Full-Stack Astronaut & Engineer",
-  "Autonomous AI Mission Specialist",
-  "Deep-Space Cloud Voyager",
-  "Hyperspace UI/UX Craftsman"
+  "Artificial Intelligence & Data Science Student",
+  "GUI & Graphics Designer",
+  "Machine Learning & Data Analytics",
+  "Mobile & Web App Developer",
+  "Creative Visual Technologist"
 ];
 
 export default function Hero({ onOpenTerminal, onOpenResumeModal }) {
@@ -30,7 +31,7 @@ export default function Hero({ onOpenTerminal, onOpenResumeModal }) {
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
-  const [activeTab, setActiveTab] = useState("developer.ts");
+  const [activeTab, setActiveTab] = useState("ml_pipeline.py");
   const [isSimulating, setIsSimulating] = useState(false);
   const [simOutput, setSimOutput] = useState("");
 
@@ -57,21 +58,18 @@ export default function Hero({ onOpenTerminal, onOpenResumeModal }) {
     return () => clearTimeout(timer);
   }, [displayedText, isDeleting, roleIndex]);
 
-  const codeSnippet = `// System Identity
-const engineer: EngineerProfile = {
+  const codeSnippet = `// AI & Data Science + GUI Design Profile
+const profile: AIDataScientist & GUIDesigner = {
   name: "Selva Guru Karthikeyan P",
-  title: "Software Engineer",
-  location: "India (IST)",
-  coreStack: [
-    "React 19", "TypeScript", "Node.js",
-    "Python", "PostgreSQL", "Docker", "AWS"
-  ],
-  passion: "Architecting high-scale digital solutions",
-  availableForHire: true,
-  execute: () => "Transforming code into impact 🚀"
+  role: "AI & Data Science Student • GUI / Graphics Designer",
+  location: "Tamil Nadu, India",
+  aiStack: ["Python", "Scikit-Learn", "Pandas", "NumPy", "EDA"],
+  guiStack: ["Adobe Photoshop", "Figma", "Design Systems", "Tailwind CSS"],
+  mobileStack: ["Flutter & Dart", "React Native & Expo", "Firebase"],
+  status: "Undergraduate Student • Open for Opportunities"
 };
 
-export default engineer;`;
+export default profile;`;
 
   const handleCopyCode = () => {
     sound.click();
@@ -83,7 +81,7 @@ export default engineer;`;
   const handleRunSimulation = () => {
     sound.click();
     setIsSimulating(true);
-    setSimOutput("Compiling engineer.ts...\nOptimizing bundle...\nAll 14 unit tests passed.\nDeployment live in 42ms ✨");
+    setSimOutput("Loading Python ML classification pipeline...\nDataset preprocessed with StandardScaler\nTraining Random Forest model (100 estimators)...\nModel evaluation complete. Status: Nominal ✨");
     setTimeout(() => {
       sound.success();
       setIsSimulating(false);
@@ -106,14 +104,14 @@ export default engineer;`;
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
               </span>
               <span className="text-xs font-mono font-medium text-cyan-200 tracking-wide flex items-center gap-1.5">
-                <span>🚀</span>
-                <span>MISSION: ORBITAL DEPLOYMENT • READY FOR FLIGHT CREWS</span>
+                <span>🤖</span>
+                <span>AI & DATA SCIENCE SCHOLAR • GUI & GRAPHICS DESIGNER</span>
               </span>
             </div>
 
             {/* Salutation & Full Name */}
             <h2 className="text-sm sm:text-base font-mono uppercase tracking-widest text-cyan-400 mb-2 font-semibold">
-              Deep-Space Comm Stream //
+              Creative Technologist //
             </h2>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-4 leading-none">
@@ -133,7 +131,7 @@ export default engineer;`;
 
             {/* Sub-headline description */}
             <p className="text-base sm:text-lg text-slate-300/90 leading-relaxed max-w-2xl mb-8 font-light">
-              Navigating the digital cosmos: architecting planetary-scale web platforms, distributed cloud spacecraft, and autonomous AI pipelines with zero-defect gravity and sub-50ms velocity.
+              Bridging the frontiers of Artificial Intelligence & Data Science with cinematic GUI architecture, high-fidelity graphics, and interactive visual computing.
             </p>
 
             {/* Action Buttons */}
@@ -205,17 +203,19 @@ export default engineer;`;
                 <LinkedinIcon className="w-4 h-4" />
               </a>
 
-              <a
-                href={personalInfo.twitter}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => sound.click()}
-                onMouseEnter={() => sound.hover()}
-                className="p-2.5 rounded-lg bg-[#121524] border border-purple-900/30 text-slate-300 hover:text-white hover:border-sky-500 hover:bg-sky-950/40 hover:scale-110 transition-all shadow-sm"
-                aria-label="Twitter Profile"
-              >
-                <TwitterIcon className="w-4 h-4" />
-              </a>
+              {personalInfo.twitter && (
+                <a
+                  href={personalInfo.twitter}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => sound.click()}
+                  onMouseEnter={() => sound.hover()}
+                  className="p-2.5 rounded-lg bg-[#121524] border border-purple-900/30 text-slate-300 hover:text-white hover:border-sky-500 hover:bg-sky-950/40 hover:scale-110 transition-all shadow-sm"
+                  aria-label="Twitter Profile"
+                >
+                  <TwitterIcon className="w-4 h-4" />
+                </a>
+              )}
 
               <a
                 href={`mailto:${personalInfo.email}`}
@@ -232,7 +232,7 @@ export default engineer;`;
 
           {/* Right Column: Interactive Code IDE Card */}
           <div className="lg:col-span-5">
-            <TiltCard maxTilt={10} className="w-full">
+            <PopUpCard delay={0.2} maxTilt={9} className="w-full">
               <div className="relative group">
                 
                 {/* Decorative backlight glow */}
@@ -247,24 +247,24 @@ export default engineer;`;
                       <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
                       <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
                       <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
-                      <span className="ml-2 text-xs font-mono text-slate-400">sgk-workspace</span>
+                      <span className="ml-2 text-xs font-mono text-slate-400">sgk-ai-studio</span>
                     </div>
 
                     {/* Actions */}
                     <div className="flex items-center gap-2">
                       <button
                         onClick={handleRunSimulation}
-                        className="px-2 py-1 rounded bg-purple-900/40 hover:bg-purple-800/60 text-purple-300 text-xs font-mono flex items-center gap-1 transition-colors"
-                        title="Run quick code test"
+                        className="px-2 py-1 rounded bg-purple-900/40 hover:bg-purple-800/60 text-purple-300 text-xs font-mono flex items-center gap-1 transition-colors cursor-pointer"
+                        title="Run AI & GUI simulation"
                       >
                         <Play className="w-3 h-3 fill-purple-400 text-purple-400" />
-                        <span>run</span>
+                        <span>train & test</span>
                       </button>
                       
                       <button
                         onClick={handleCopyCode}
-                        className="p-1 rounded text-slate-400 hover:text-slate-200 transition-colors"
-                        title="Copy code"
+                        className="p-1 rounded text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                        title="Copy profile code"
                       >
                         {copiedCode ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                       </button>
@@ -276,30 +276,30 @@ export default engineer;`;
                     <button
                       onClick={() => {
                         sound.click();
-                        setActiveTab('spacecraft.ts');
+                        setActiveTab('ml_pipeline.py');
                       }}
                       className={`flex items-center gap-1.5 px-3 py-2 border-b-2 transition-all cursor-pointer ${
-                        activeTab === 'spacecraft.ts' || activeTab === 'developer.ts'
+                        activeTab === 'ml_pipeline.py'
                           ? 'border-cyan-400 text-cyan-300 bg-[#0c0e18]'
                           : 'border-transparent text-slate-400 hover:text-slate-200'
                       }`}
                     >
                       <Code2 className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>spacecraft.ts</span>
+                      <span>ml_pipeline.py</span>
                     </button>
 
                     <button
                       onClick={() => {
                         sound.click();
-                        setActiveTab('payload.json');
+                        setActiveTab('gui_tokens.json');
                       }}
                       className={`flex items-center gap-1.5 px-3 py-2 border-b-2 transition-all cursor-pointer ${
-                        activeTab === 'payload.json'
+                        activeTab === 'gui_tokens.json'
                           ? 'border-cyan-400 text-cyan-300 bg-[#0c0e18]'
                           : 'border-transparent text-slate-400 hover:text-slate-200'
                       }`}
                     >
-                      <span>payload.json</span>
+                      <span>gui_tokens.json</span>
                     </button>
 
                     <button
@@ -319,43 +319,46 @@ export default engineer;`;
 
                   {/* Code Content Area */}
                   <div className="p-4 font-mono text-xs text-left leading-relaxed overflow-x-auto min-h-[220px]">
-                    {(activeTab === 'spacecraft.ts' || activeTab === 'developer.ts') && (
+                    {activeTab === 'ml_pipeline.py' && (
                       <pre className="text-slate-300 animate-fadeIn">
-                        <span className="text-purple-400">const</span> <span className="text-yellow-300">astronaut</span>: <span className="text-cyan-400">FlightCrew</span> = &#123;{'\n'}
-                        {'  '}<span className="text-indigo-300">name</span>: <span className="text-emerald-400">"Selva Guru Karthikeyan P"</span>,{'\n'}
-                        {'  '}<span className="text-indigo-300">missionRole</span>: <span className="text-emerald-400">"Systems Architect & Lead"</span>,{'\n'}
-                        {'  '}<span className="text-indigo-300">orbitSector</span>: <span className="text-emerald-400">"Sector 04 (India/IST)"</span>,{'\n'}
-                        {'  '}<span className="text-indigo-300">propulsion</span>: [{'\n'}
-                        {'    '}<span className="text-emerald-400">"React 19"</span>, <span className="text-emerald-400">"TypeScript"</span>, <span className="text-emerald-400">"Node.js"</span>,{'\n'}
-                        {'    '}<span className="text-emerald-400">"Python"</span>, <span className="text-emerald-400">"FastAPI"</span>, <span className="text-emerald-400">"Docker / AWS"</span>{'\n'}
-                        {'  '}],{'\n'}
-                        {'  '}<span className="text-indigo-300">flightReady</span>: <span className="text-amber-400">true</span>,{'\n'}
-                        {'  '}<span className="text-indigo-300">navigateHyperspace</span>: () =&gt; &#123;{'\n'}
-                        {'    '}<span className="text-purple-400">return</span> <span className="text-emerald-400">"Zero-gravity precision & scale 🚀"</span>;{'\n'}
-                        {'  '}&#125;{'\n'}
-                        &#125;;
+                        <span className="text-purple-400">import</span> <span className="text-yellow-300">pandas</span> <span className="text-purple-400">as</span> <span className="text-yellow-300">pd</span>{'\n'}
+                        <span className="text-purple-400">from</span> <span className="text-yellow-300">sklearn.ensemble</span> <span className="text-purple-400">import</span> <span className="text-yellow-300">RandomForestClassifier</span>{'\n'}
+                        <span className="text-purple-400">from</span> <span className="text-yellow-300">sklearn.preprocessing</span> <span className="text-purple-400">import</span> <span className="text-yellow-300">StandardScaler</span>{'\n'}
+                        {'\n'}
+                        <span className="text-slate-400"># Data preprocessing & feature scaling</span>{'\n'}
+                        scaler = StandardScaler(){'\n'}
+                        X_scaled = scaler.fit_transform(X_train){'\n'}
+                        {'\n'}
+                        <span className="text-slate-400"># Train predictive model</span>{'\n'}
+                        rf = RandomForestClassifier(n_estimators=<span className="text-amber-400">100</span>, random_state=<span className="text-amber-400">42</span>){'\n'}
+                        rf.fit(X_scaled, y_train){'\n'}
+                        accuracy = rf.score(scaler.transform(X_test), y_test){'\n'}
+                        <span className="text-purple-400">print</span>(<span className="text-emerald-400">f"Model Accuracy: &#123;accuracy * 100:.2f&#125;%"</span>)
                       </pre>
                     )}
 
-                    {activeTab === 'payload.json' && (
+                    {(activeTab === 'gui_tokens.json' || activeTab === 'payload.json') && (
                       <pre className="text-slate-300 animate-fadeIn">
                         &#123;{'\n'}
-                        {'  '}<span className="text-indigo-300">"avionics"</span>: [<span className="text-emerald-400">"React 19"</span>, <span className="text-emerald-400">"Next.js"</span>, <span className="text-emerald-400">"Tailwind v4"</span>],{'\n'}
-                        {'  '}<span className="text-indigo-300">"thrusters"</span>: [<span className="text-emerald-400">"Node.js"</span>, <span className="text-emerald-400">"Python"</span>, <span className="text-emerald-400">"FastAPI"</span>],{'\n'}
-                        {'  '}<span className="text-indigo-300">"vaults"</span>: [<span className="text-emerald-400">"PostgreSQL"</span>, <span className="text-emerald-400">"MongoDB"</span>, <span className="text-emerald-400">"Redis"</span>],{'\n'}
-                        {'  '}<span className="text-indigo-300">"navigation"</span>: &#123; <span className="text-indigo-300">"cloud"</span>: <span className="text-emerald-400">"AWS"</span>, <span className="text-indigo-300">"container"</span>: <span className="text-emerald-400">"Docker"</span> &#125;,{'\n'}
-                        {'  '}<span className="text-indigo-300">"trajectory"</span>: <span className="text-emerald-400">"Sub-50ms Response Speed ⚡"</span>{'\n'}
+                        {'  '}<span className="text-indigo-300">"design_system"</span>: <span className="text-emerald-400">"Cosmic Modern Dark"</span>,{'\n'}
+                        {'  '}<span className="text-indigo-300">"color_palette"</span>: &#123;{'\n'}
+                        {'    '}<span className="text-indigo-300">"primary_cyan"</span>: <span className="text-emerald-400">"#38bdf8"</span>,{'\n'}
+                        {'    '}<span className="text-indigo-300">"accent_violet"</span>: <span className="text-emerald-400">"#a855f7"</span>,{'\n'}
+                        {'    '}<span className="text-indigo-300">"obsidian_bg"</span>: <span className="text-emerald-400">"#08090e"</span>{'\n'}
+                        {'  '}&#125;,{'\n'}
+                        {'  '}<span className="text-indigo-300">"typography"</span>: [<span className="text-emerald-400">"Inter"</span>, <span className="text-emerald-400">"JetBrains Mono"</span>],{'\n'}
+                        {'  '}<span className="text-indigo-300">"spring_physics"</span>: &#123; <span className="text-indigo-300">"stiffness"</span>: <span className="text-amber-400">100</span>, <span className="text-indigo-300">"damping"</span>: <span className="text-amber-400">14</span> &#125;{'\n'}
                         &#125;
                       </pre>
                     )}
 
                     {activeTab === 'telemetry.log' && (
                       <pre className="text-slate-300 font-mono text-[11px] leading-loose animate-fadeIn">
-                        <span className="text-emerald-400">[ORBIT: 28.5°]</span> Orbital stabilization achieved.{'\n'}
-                        <span className="text-cyan-400">[BEACON]</span> Latency to mission control: 14ms{'\n'}
-                        <span className="text-purple-400">[FUEL/PWR]</span> Solar array 100% • Reactor 99.9% Uptime{'\n'}
-                        <span className="text-amber-400">[SECURITY]</span> Encrypted telemetry tunnel: ACTIVE{'\n'}
-                        <span className="text-emerald-400">[STATUS]</span> All orbital flight systems nominal.
+                        <span className="text-emerald-400">[DATA PREP]</span> StandardScaler applied to 11 physicochemical features{'\n'}
+                        <span className="text-cyan-400">[ML TRAIN]</span> RandomForestClassifier fitted with 100 estimators{'\n'}
+                        <span className="text-purple-400">[EDA VISUALS]</span> Correlation matrix & feature importances rendered{'\n'}
+                        <span className="text-amber-400">[HACKATHON]</span> SIH mobile app architecture verified & operational{'\n'}
+                        <span className="text-emerald-400">[STATUS]</span> Data science & application builds nominal.
                       </pre>
                     )}
 
@@ -371,37 +374,38 @@ export default engineer;`;
                   <div className="px-4 py-1.5 bg-[#080a12] border-t border-purple-900/20 flex items-center justify-between text-[11px] font-mono text-slate-400">
                     <div className="flex items-center gap-3">
                       <span className="flex items-center gap-1 text-emerald-400">
-                        <Sparkles className="w-3 h-3" /> UTF-8
+                        <Sparkles className="w-3 h-3" /> Python 3.11 • Scikit-Learn
                       </span>
-                      <span>{activeTab === 'stack.json' ? 'JSON' : activeTab === 'uptime.log' ? 'LOG' : 'TypeScript 5.8'}</span>
+                      <span>{activeTab === 'gui_tokens.json' || activeTab === 'payload.json' ? 'JSON' : activeTab === 'telemetry.log' ? 'LOG' : 'Python 3.11'}</span>
                     </div>
-                    <div className="text-purple-400">
-                      Ln 14, Col 2
+                    <div className="text-cyan-400">
+                      System: Nominal
                     </div>
                   </div>
 
                 </div>
               </div>
-            </TiltCard>
+            </PopUpCard>
           </div>
 
         </div>
 
-        {/* Global Statistics Strip */}
-        <div className="mt-16 pt-10 border-t border-purple-900/20 grid grid-cols-2 md:grid-cols-4 gap-6">
+        {/* Global Statistics Strip: Staggered Scrolling Pop-Up Cards */}
+        <div className="mt-16 pt-10 border-t border-white/[0.08] grid grid-cols-2 md:grid-cols-4 gap-6">
           {personalInfo.stats.map((stat, idx) => (
-            <TiltCard key={idx} maxTilt={8} className="w-full">
+            <PopUpCard key={idx} index={idx} delay={0.15 + idx * 0.08} className="w-full">
               <div 
-                className="p-5 rounded-2xl bg-[#0f111f]/60 backdrop-blur-md border border-purple-900/20 hover:border-purple-500/40 transition-all text-center group"
+                className="relative overflow-hidden p-6 rounded-3xl bg-gradient-to-b from-[#13172e]/90 via-[#0d1022]/90 to-[#080913]/95 border border-white/10 hover:border-cyan-400/50 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8),inset_0_1px_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition-[border-color,box-shadow] duration-300 text-center group"
               >
-                <div className="text-2xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-indigo-300 to-cyan-300 mb-1 group-hover:scale-105 transition-transform">
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
+                <div className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-indigo-300 to-cyan-300 mb-1.5 group-hover:scale-105 transition-transform font-mono">
                   <CountUp endVal={stat.value} />
                 </div>
-                <div className="text-xs sm:text-sm text-slate-400 font-medium">
+                <div className="text-xs sm:text-sm text-slate-300 font-medium">
                   {stat.label}
                 </div>
               </div>
-            </TiltCard>
+            </PopUpCard>
           ))}
         </div>
 

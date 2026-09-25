@@ -30,8 +30,8 @@ export default function CommandPalette({
   const actions = [
     {
       id: 'projects',
-      title: 'Explore Featured Projects',
-      subtitle: 'View full-stack, AI, and systems engineering showcase',
+      title: 'Explore AI & GUI Portfolios',
+      subtitle: 'View AI models, data science pipelines, and GUI design systems',
       icon: FolderGit2,
       category: 'Navigation',
       perform: () => {
@@ -41,8 +41,8 @@ export default function CommandPalette({
     },
     {
       id: 'terminal',
-      title: 'Launch GuruShell Terminal',
-      subtitle: 'Open the interactive CLI developer terminal',
+      title: 'Launch AI & GUI Terminal',
+      subtitle: 'Open the interactive Python/AI & design token terminal',
       icon: Terminal,
       category: 'Interactive',
       perform: onOpenTerminal
@@ -58,7 +58,7 @@ export default function CommandPalette({
     {
       id: 'skills',
       title: 'Inspect Technical Mastery',
-      subtitle: 'Frontend, Backend, Cloud & AI proficiencies',
+      subtitle: 'Deep Learning, Data Science, Figma, and GUI proficiencies',
       icon: Layers,
       category: 'Navigation',
       perform: () => {
@@ -69,7 +69,7 @@ export default function CommandPalette({
     {
       id: 'about',
       title: 'About Selva Guru Karthikeyan P',
-      subtitle: 'Engineering philosophy, background, and education',
+      subtitle: 'AI & Data Science scholar, GUI & graphics design philosophy',
       icon: User,
       category: 'Navigation',
       perform: () => {

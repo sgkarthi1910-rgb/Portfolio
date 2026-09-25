@@ -5,37 +5,40 @@ export default function AnimatedSection({
   children, 
   className = '', 
   delay = 0,
-  direction = 'up' // 'up' | 'down' | 'left' | 'right'
+  direction = 'pop', // 'pop' | 'up' | 'down' | 'left' | 'right'
+  scale = 0.90
 }) {
+  const isPop = direction === 'pop';
+
   const directions = {
-    up: { y: 40, x: 0 },
-    down: { y: -40, x: 0 },
-    left: { x: 40, y: 0 },
-    right: { x: -40, y: 0 }
+    pop: { y: 40, x: 0, scale },
+    up: { y: 40, x: 0, scale: 0.96 },
+    down: { y: -40, x: 0, scale: 0.96 },
+    left: { x: 40, y: 0, scale: 0.96 },
+    right: { x: -40, y: 0, scale: 0.96 }
   };
 
-  const offset = directions[direction] || directions.up;
+  const offset = directions[direction] || directions.pop;
 
   return (
     <motion.div
       initial={{ 
         opacity: 0, 
-        ...offset,
-        filter: 'blur(4px)'
+        ...offset
       }}
       whileInView={{ 
         opacity: 1, 
         x: 0, 
         y: 0, 
-        filter: 'blur(0px)'
+        scale: 1
       }}
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={{ once: true, amount: 0.1, margin: '-30px' }}
       transition={{
-        duration: 0.7,
+        duration: isPop ? 0.6 : 0.55,
         delay,
         ease: [0.16, 1, 0.3, 1]
       }}
-      className={className}
+      className={`transform-gpu ${className}`}
     >
       {children}
     </motion.div>
