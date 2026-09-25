@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -19,6 +20,24 @@ import { sound } from '../utils/sound';
 
 export default function ResumeModal({ isOpen, onClose }) {
   const [copied, setCopied] = useState(false);
+
+  // Lock background scroll and handle ESC key
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [isOpen, onClose]);
 
   const handlePrint = () => {
     sound.click();
@@ -54,7 +73,9 @@ ${certificationsData.map((c) => `• ${c.title} (${c.issuer}, ${c.date})`).join(
     setTimeout(() => setCopied(false), 2000);
   };
 
-  return (
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div 
@@ -62,7 +83,7 @@ ${certificationsData.map((c) => `• ${c.title} (${c.issuer}, ${c.date})`).join(
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md"
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md"
           onClick={onClose}
         >
           <motion.div 
@@ -226,6 +247,7 @@ ${certificationsData.map((c) => `• ${c.title} (${c.issuer}, ${c.date})`).join(
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

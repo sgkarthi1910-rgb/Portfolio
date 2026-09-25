@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Search, 
   Terminal, 
@@ -127,6 +128,17 @@ export default function CommandPalette({
     setSelectedIndex(0);
   }, [query]);
 
+  // Lock background scroll when open
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
+
   // Global Ctrl+K / Cmd+K listener
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -168,11 +180,11 @@ export default function CommandPalette({
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || typeof document === 'undefined') return null;
 
-  return (
+  return createPortal(
     <div 
-      className="fixed inset-0 z-[100] flex items-start justify-center pt-24 px-4 bg-black/80 backdrop-blur-md animate-fadeIn"
+      className="fixed inset-0 z-[99999] flex items-start justify-center pt-24 px-4 bg-black/80 backdrop-blur-md animate-fadeIn"
       onClick={onClose}
     >
       <div 
@@ -252,6 +264,7 @@ export default function CommandPalette({
           <span className="text-purple-400">Command Palette</span>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

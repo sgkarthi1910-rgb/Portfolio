@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ExternalLink, 
@@ -18,6 +19,24 @@ import { sound } from '../utils/sound';
 export default function Projects() {
   const [selectedCategory, setSelectedCategory] = useState("All Projects");
   const [activeModalProject, setActiveModalProject] = useState(null);
+
+  // Lock background scrolling and allow ESC key to close when project modal is open
+  useEffect(() => {
+    if (activeModalProject) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          setActiveModalProject(null);
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [activeModalProject]);
 
   const categories = ["All Projects", "Mobile & Web Apps", "AI & Machine Learning", "Data Science & Analytics"];
 
@@ -218,129 +237,132 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Modal for Deep-Dive Architecture Inspection with Spring Pop-Up */}
-        <AnimatePresence>
-          {activeModalProject && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
-              onClick={handleCloseModal}
-            >
+        {/* Modal for Deep-Dive Architecture Inspection with Spring Pop-Up - Portaled to document.body to prevent any section clipping */}
+        {typeof document !== 'undefined' && createPortal(
+          <AnimatePresence>
+            {activeModalProject && (
               <motion.div 
-                initial={{ opacity: 0, scale: 0.88, y: 32 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.90, y: 24 }}
-                transition={{ type: "spring", stiffness: 350, damping: 26 }}
-                className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0c0e1e]/98 border border-purple-500/40 p-6 sm:p-8 shadow-2xl text-left"
-                onClick={(e) => e.stopPropagation()}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md"
+                onClick={handleCloseModal}
               >
-                {/* Top specular glow line */}
-                <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent pointer-events-none" />
-
-                {/* Close Button */}
-                <button
-                  onClick={handleCloseModal}
-                  className="absolute top-6 right-6 p-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 hover:text-white border border-purple-800/40 transition-colors cursor-pointer"
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.88, y: 32 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.90, y: 24 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 26 }}
+                  className="relative w-full max-w-2xl max-h-[88vh] overflow-y-auto overscroll-contain rounded-3xl bg-[#0c0e1e]/98 border border-purple-500/40 p-6 sm:p-8 shadow-2xl text-left"
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <X className="w-5 h-5" />
-                </button>
+                  {/* Top specular glow line */}
+                  <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent pointer-events-none" />
 
-                {/* Modal Category & Badge */}
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="px-3 py-1 rounded-full text-xs font-mono bg-purple-950/80 text-purple-300 border border-purple-800/40">
-                    {activeModalProject.badge}
-                  </span>
-                  <span className="text-xs font-mono text-cyan-400">
-                    {activeModalProject.category}
-                  </span>
-                </div>
+                  {/* Close Button */}
+                  <button
+                    onClick={handleCloseModal}
+                    className="absolute top-6 right-6 p-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 hover:text-white border border-purple-800/40 transition-colors cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
 
-                {/* Modal Title */}
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
-                  {activeModalProject.title}
-                </h3>
-
-                {/* Modal Image */}
-                <div className="relative h-60 w-full rounded-2xl overflow-hidden mb-6 border border-purple-900/30">
-                  <img
-                    src={activeModalProject.image}
-                    alt={activeModalProject.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Full Description */}
-                <div className="mb-6">
-                  <h4 className="text-sm font-mono text-purple-300 uppercase tracking-wider mb-2">
-                    System Architecture & Deep Dive
-                  </h4>
-                  <p className="text-slate-300 text-sm leading-relaxed font-light">
-                    {activeModalProject.fullDescription}
-                  </p>
-                </div>
-
-                {/* Highlights */}
-                <div className="mb-6">
-                  <h4 className="text-sm font-mono text-cyan-400 uppercase tracking-wider mb-3">
-                    Key Technical Capabilities
-                  </h4>
-                  <ul className="space-y-2">
-                    {activeModalProject.highlights.map((highlight, hIdx) => (
-                      <li key={hIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300 font-light">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Technologies */}
-                <div className="mb-8">
-                  <h4 className="text-sm font-mono text-slate-400 uppercase tracking-wider mb-3">
-                    Integrated Stacks & Frameworks
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {activeModalProject.technologies.map((t, idx) => (
-                      <span
-                        key={idx}
-                        className="px-3 py-1 rounded-lg text-xs font-mono bg-purple-950/40 text-purple-200 border border-purple-800/40"
-                      >
-                        {t}
-                      </span>
-                    ))}
+                  {/* Modal Category & Badge */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="px-3 py-1 rounded-full text-xs font-mono bg-purple-950/80 text-purple-300 border border-purple-800/40">
+                      {activeModalProject.badge}
+                    </span>
+                    <span className="text-xs font-mono text-cyan-400">
+                      {activeModalProject.category}
+                    </span>
                   </div>
-                </div>
 
-                {/* Actions */}
-                <div className="flex items-center gap-4 pt-4 border-t border-purple-900/30">
-                  <a
-                    href={activeModalProject.demoUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => sound.click()}
-                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all cursor-pointer"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Launch Interactive Demo
-                  </a>
-                  <a
-                    href={activeModalProject.githubUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => sound.click()}
-                    className="py-3 px-5 rounded-xl bg-[#14182b] hover:bg-purple-900/40 text-slate-200 hover:text-white border border-purple-800/40 font-semibold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
-                  >
-                    <GithubIcon className="w-4 h-4" />
-                    View GitHub
-                  </a>
-                </div>
+                  {/* Modal Title */}
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
+                    {activeModalProject.title}
+                  </h3>
+
+                  {/* Modal Image */}
+                  <div className="relative h-60 w-full rounded-2xl overflow-hidden mb-6 border border-purple-900/30">
+                    <img
+                      src={activeModalProject.image}
+                      alt={activeModalProject.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* Full Description */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-mono text-purple-300 uppercase tracking-wider mb-2">
+                      System Architecture & Deep Dive
+                    </h4>
+                    <p className="text-slate-300 text-sm leading-relaxed font-light">
+                      {activeModalProject.fullDescription}
+                    </p>
+                  </div>
+
+                  {/* Highlights */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-mono text-cyan-400 uppercase tracking-wider mb-3">
+                      Key Technical Capabilities
+                    </h4>
+                    <ul className="space-y-2">
+                      {activeModalProject.highlights.map((highlight, hIdx) => (
+                        <li key={hIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300 font-light">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Technologies */}
+                  <div className="mb-8">
+                    <h4 className="text-sm font-mono text-slate-400 uppercase tracking-wider mb-3">
+                      Integrated Stacks & Frameworks
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {activeModalProject.technologies.map((t, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 rounded-lg text-xs font-mono bg-purple-950/40 text-purple-200 border border-purple-800/40"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-4 pt-4 border-t border-purple-900/30">
+                    <a
+                      href={activeModalProject.demoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => sound.click()}
+                      className="flex-1 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all cursor-pointer"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Launch Interactive Demo
+                    </a>
+                    <a
+                      href={activeModalProject.githubUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => sound.click()}
+                      className="py-3 px-5 rounded-xl bg-[#14182b] hover:bg-purple-900/40 text-slate-200 hover:text-white border border-purple-800/40 font-semibold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    >
+                      <GithubIcon className="w-4 h-4" />
+                      View GitHub
+                    </a>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </AnimatePresence>,
+          document.body
+        )}
 
       </div>
     </section>

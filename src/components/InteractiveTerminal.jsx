@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Terminal as TerminalIcon, X, Maximize2, Minimize2, CornerDownLeft, Sparkles } from 'lucide-react';
 import { terminalCommands, personalInfo } from '../data/portfolioData';
 import { sound } from '../utils/sound';
@@ -18,14 +19,26 @@ export default function InteractiveTerminal({ isOpen, onClose }) {
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
     }
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [history]);
 
-  if (!isOpen) return null;
+  if (!isOpen || typeof document === 'undefined') return null;
 
   const handleCommand = (e) => {
     if (e.key === 'Enter') {
@@ -98,8 +111,8 @@ export default function InteractiveTerminal({ isOpen, onClose }) {
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fadeIn">
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fadeIn">
       <div 
         className={`relative w-full rounded-2xl bg-[#090b14] border border-purple-600/50 shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${
           isFullScreen ? 'h-full max-w-full' : 'max-w-3xl h-[600px] max-h-[85vh]'
@@ -227,6 +240,7 @@ export default function InteractiveTerminal({ isOpen, onClose }) {
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
