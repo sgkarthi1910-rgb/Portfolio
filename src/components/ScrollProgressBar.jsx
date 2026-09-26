@@ -15,9 +15,11 @@ export default function ScrollProgressBar() {
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
-    return scrollYProgress.onChange((latest) => {
-      setPercentage(Math.round(latest * 100));
-      setShowButton(latest > 0.15);
+    return scrollYProgress.on("change", (latest) => {
+      const pct = Math.round(latest * 100);
+      setPercentage((prev) => (prev !== pct ? pct : prev));
+      const shouldShow = latest > 0.15;
+      setShowButton((prev) => (prev !== shouldShow ? shouldShow : prev));
     });
   }, [scrollYProgress]);
 

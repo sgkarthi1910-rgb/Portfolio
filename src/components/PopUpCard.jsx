@@ -28,6 +28,7 @@ export default function PopUpCard({
 
   const handleMouseMove = useCallback((e) => {
     if (!cardRef.current) return;
+    if (typeof window !== 'undefined' && (window.innerWidth < 1024 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches))) return;
     const rect = cardRef.current.getBoundingClientRect();
     setMousePos({
       x: e.clientX - rect.left,
@@ -99,7 +100,7 @@ export default function PopUpCard({
             mass: 0.6
           }
         } : undefined}
-        className={`relative w-full ${isFullHeight ? 'h-full' : ''} rounded-3xl transform-gpu will-change-transform transition-[border-color,box-shadow] duration-300 ${currentGlow.border} ${currentGlow.shadow} ${innerClassName}`}
+        className={`relative w-full ${isFullHeight ? 'h-full' : ''} rounded-3xl transform-gpu transition-[border-color,box-shadow] duration-300 ${currentGlow.border} ${currentGlow.shadow} ${innerClassName}`}
       >
         {/* Dynamic Interactive Spotlight following cursor */}
         {interactive && isHovered && (

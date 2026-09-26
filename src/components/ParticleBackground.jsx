@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import saturnUrl from '../assets/saturn_planet.png';
 import galaxyUrl from '../assets/andromeda_galaxy.png';
+import nasaBlackSpaceUrl from '../assets/nasa_deep_black_space.jpg';
 
 // Scientifically accurate stellar spectral classes (Morgan-Keenan System)
 // Realistic deep-space color temperatures: dignified, crystalline, non-saturated
@@ -28,6 +29,7 @@ export default function ParticleBackground() {
   const canvasRef = useRef(null);
   const raRef = useRef(null);
   const decRef = useRef(null);
+  const warpRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -41,12 +43,15 @@ export default function ParticleBackground() {
     let lastTime = performance.now();
     let simTime = 0;
 
-    // Load celestial deep-sky photographic assets
+    // Load authentic celestial photographic assets from NASA & Astrophotography surveys
     const saturnImg = new Image();
     saturnImg.src = saturnUrl;
 
     const galaxyImg = new Image();
     galaxyImg.src = galaxyUrl;
+
+    const nasaImg = new Image();
+    nasaImg.src = nasaBlackSpaceUrl;
 
     // Detect mobile / coarse pointer
     const isMobileDevice = () => {
@@ -57,15 +62,15 @@ export default function ParticleBackground() {
     };
 
     let isMobile = isMobileDevice();
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.25) : Math.min(window.devicePixelRatio || 1, 2);
     let width = window.innerWidth;
     let height = window.innerHeight;
 
     const setCanvasDimensions = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      isMobile = isMobileDevice();
+      dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.25) : Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
       height = window.innerHeight;
-      isMobile = isMobileDevice();
 
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
@@ -109,37 +114,7 @@ export default function ParticleBackground() {
     const maxStardust = 35;
     const stardustColors = ['#38bdf8', '#c084fc', '#fef08a', '#ffffff', '#e0e7ff'];
 
-    // Offscreen Canvas Cache for 60/120 FPS hardware-accelerated star blitting
-    const spriteCache = {
-      starGlows: {}
-    };
 
-    const initStarSprites = () => {
-      SPECTRAL_CLASSES.forEach((s) => {
-        const spriteSize = 32;
-        const offCanvas = document.createElement('canvas');
-        offCanvas.width = spriteSize;
-        offCanvas.height = spriteSize;
-        const offCtx = offCanvas.getContext('2d');
-        if (!offCtx) return;
-
-        const half = spriteSize / 2;
-        const grad = offCtx.createRadialGradient(half, half, 0, half, half, half);
-        grad.addColorStop(0, '#ffffff');
-        grad.addColorStop(0.22, s.color);
-        grad.addColorStop(0.55, s.glow);
-        grad.addColorStop(1, 'transparent');
-
-        offCtx.fillStyle = grad;
-        offCtx.beginPath();
-        offCtx.arc(half, half, half, 0, Math.PI * 2);
-        offCtx.fill();
-
-        spriteCache.starGlows[s.class] = offCanvas;
-      });
-    };
-
-    initStarSprites();
 
     // Star Collections
     let microStars = [];
@@ -153,65 +128,60 @@ export default function ParticleBackground() {
       landmarkStars = [];
       meteors = [];
 
-      // A: Deep-Field Unresolved Micro-Stars (Milky Way Backdrop)
+      // A: Deep-Field Micro-Stars (Crisp Pinpoints, Clearly Visible When Idle)
       const microCount = isMobile
-        ? Math.min(Math.floor(width * 0.16), 130)
-        : Math.min(Math.floor(width * 0.28), 380);
+        ? Math.min(Math.floor(width * 0.22), 120)
+        : Math.min(Math.floor(width * 0.38), 440);
 
       for (let i = 0; i < microCount; i++) {
-        const u = Math.random();
-        const beltY = (u * 0.65 + 0.18) * height + (Math.random() - 0.5) * height * 0.45;
-
         microStars.push({
           x: Math.random() * width,
-          y: beltY,
-          size: Math.random() * 0.75 + 0.25,
-          alpha: Math.random() * 0.45 + 0.18,
-          breatheSpeed: Math.random() * 0.08 + 0.04,
-          breathePhase: Math.random() * Math.PI * 2,
+          y: Math.random() * height,
+          depth: Math.random() * 0.75 + 0.25,
+          size: Math.random() * 0.30 + 0.75,
+          alpha: Math.random() * 0.20 + 0.55,
           parallaxFactor: Math.random() * 0.012 + 0.004,
-          vx: (Math.random() - 0.5) * 0.025,
-          vy: (Math.random() - 0.5) * 0.018
+          curveVariance: (Math.random() - 0.5) * 0.20 + 1.0
         });
       }
 
-      // B: Medium Classified Stars with Physical Morgan-Keenan Spectral Radiance
+      // B: Medium Classified Stars (Authentic Spectral Tints, Clearly Visible When Idle)
       const medCount = isMobile
-        ? Math.min(Math.floor(width * 0.04), 22)
-        : Math.min(Math.floor(width * 0.06), 65);
+        ? Math.min(Math.floor(width * 0.045), 24)
+        : Math.min(Math.floor(width * 0.082), 105);
 
       for (let i = 0; i < medCount; i++) {
         const spectral = getRandomSpectralStar();
         const depth = Math.random();
+
         classifiedStars.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          radius: depth > 0.75 ? Math.random() * 0.9 + 1.1 : Math.random() * 0.6 + 0.6,
-          spectral: spectral,
-          alpha: Math.random() * 0.35 + 0.45,
-          depth: depth,
-          breatheSpeed: Math.random() * 0.05 + 0.02,
-          breathePhase: Math.random() * Math.PI * 2,
-          parallaxFactor: depth * 0.028 + 0.010,
-          vx: (Math.random() - 0.45) * 0.035 * (depth + 0.2),
-          vy: (Math.random() - 0.5) * 0.025 * (depth + 0.2)
+          radius: depth > 0.75 ? Math.random() * 0.25 + 1.15 : Math.random() * 0.20 + 0.90,
+          spectral,
+          alpha: Math.random() * 0.20 + 0.65,
+          depth,
+          parallaxFactor: depth * 0.025 + 0.010,
+          curveVariance: (Math.random() - 0.5) * 0.18 + 1.0
         });
       }
 
-      // C: 2 Prominent Landmark Stars
-      const primaryCount = isMobile ? 1 : 2;
+      // C: 3 Landmark Stars (Calm Celestial Anchors - including center of screen)
+      const primaryCount = isMobile ? 1 : 3;
+      const landmarkConfigs = [
+        { x: 0.22 * width, y: 0.22 * height, spectral: SPECTRAL_CLASSES[0] }, // Upper-left
+        { x: 0.50 * width, y: 0.48 * height, spectral: SPECTRAL_CLASSES[2] }, // Center anchor
+        { x: 0.78 * width, y: 0.56 * height, spectral: SPECTRAL_CLASSES[4] }  // Middle-right
+      ];
       for (let i = 0; i < primaryCount; i++) {
-        const spectral = i === 0 ? SPECTRAL_CLASSES[0] : SPECTRAL_CLASSES[4];
         landmarkStars.push({
-          x: (0.16 + i * 0.58) * width + (Math.random() - 0.5) * 60,
-          y: (0.18 + i * 0.42) * height,
-          radius: 1.8,
-          spectral: spectral,
-          spikeLength: isMobile ? 16 : 24,
-          alpha: 0.85,
-          parallaxFactor: 0.035,
-          vx: 0.01,
-          vy: -0.008
+          x: landmarkConfigs[i].x,
+          y: landmarkConfigs[i].y,
+          radius: 1.45,
+          spectral: landmarkConfigs[i].spectral,
+          alpha: 0.82,
+          parallaxFactor: 0.025,
+          curveVariance: 1.0
         });
       }
     };
@@ -248,7 +218,6 @@ export default function ParticleBackground() {
     // Event Handlers
     const handleResize = () => {
       setCanvasDimensions();
-      initStarSprites();
       initStars();
     };
 
@@ -280,8 +249,21 @@ export default function ParticleBackground() {
       if (!isMobile) mouse.active = true;
     };
 
+    // High-precision scroll velocity & warp physics
+    let lastScrollY = window.scrollY || window.pageYOffset || 0;
+    let scrollVelocity = 0;
+    let wheelImpulse = 0;
+    let touchStartY = 0;
+
     const handleScroll = () => {
       camera.targetScrollY = window.scrollY || window.pageYOffset || 0;
+    };
+
+    const handleWheel = (e) => {
+      let delta = e.deltaY;
+      if (e.deltaMode === 1) delta *= 28;
+      else if (e.deltaMode === 2) delta *= 350;
+      wheelImpulse += delta * 0.085;
     };
 
     const handleVisibilityChange = () => {
@@ -295,6 +277,7 @@ export default function ParticleBackground() {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('mouseleave', handleMouseLeave, { passive: true });
     window.addEventListener('mouseenter', handleMouseEnter, { passive: true });
+    window.addEventListener('wheel', handleWheel, { passive: true });
     window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
@@ -308,11 +291,49 @@ export default function ParticleBackground() {
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
       simTime += dt;
+      const dtScale = Math.min(2.0, Math.max(0.5, dt * 60));
 
       // Smooth camera interpolation
-      camera.x += (camera.targetX - camera.x) * 0.035;
-      camera.y += (camera.targetY - camera.y) * 0.035;
-      camera.scrollY += (camera.targetScrollY - camera.scrollY) * 0.055;
+      camera.x += (camera.targetX - camera.x) * (0.035 * dtScale);
+      camera.y += (camera.targetY - camera.y) * (0.035 * dtScale);
+      camera.scrollY += (camera.targetScrollY - camera.scrollY) * (0.055 * dtScale);
+
+      // Precise instantaneous scroll impulse calculation
+      const currentScrollY = window.scrollY || window.pageYOffset || 0;
+      const scrollDelta = currentScrollY - lastScrollY;
+      lastScrollY = currentScrollY;
+
+      // On mobile: 100% native scrollDelta tracking with zero touch conflicts
+      // On desktop: scrollDelta + smooth wheel impulse
+      const totalImpulse = isMobile ? scrollDelta * 0.42 : (scrollDelta * 0.35 + wheelImpulse);
+      wheelImpulse *= Math.pow(0.84, dtScale); // smooth impulse dissipation
+
+      // Smooth exponential spring-damper velocity integration
+      scrollVelocity += (totalImpulse - scrollVelocity) * ((isMobile ? 0.35 : 0.28) * dtScale);
+      scrollVelocity *= Math.pow(isMobile ? 0.940 : 0.958, dtScale); // fluid deceleration inertia
+      if (Math.abs(scrollVelocity) < 0.005) scrollVelocity = 0;
+
+      // Clamped warp velocity for rendering
+      const warpV = Math.max(-50, Math.min(50, scrollVelocity));
+      const absV = Math.abs(warpV);
+      const signV = Math.sign(warpV);
+
+      // Real-time Astrometry Telemetry HUD update
+      if (warpRef.current) {
+        if (absV > 0.4) {
+          const cSpeed = (absV * 0.14).toFixed(2);
+          if (signV > 0) {
+            warpRef.current.textContent = `+${cSpeed} c // FORWARD WARP ENGAGED`;
+            warpRef.current.className = 'text-cyan-400 font-mono font-semibold';
+          } else {
+            warpRef.current.textContent = `-${cSpeed} c // REVERSE WARP ENGAGED`;
+            warpRef.current.className = 'text-purple-400 font-mono font-semibold';
+          }
+        } else {
+          warpRef.current.textContent = '0.00 c // SUB-LIGHT CRUISE';
+          warpRef.current.className = 'text-emerald-400/90 font-mono';
+        }
+      }
 
       // Mouse tracking
       mouse.prevX = mouse.x;
@@ -375,56 +396,63 @@ export default function ParticleBackground() {
       ctx.fillStyle = '#010206';
       ctx.fillRect(0, 0, width, height);
 
-      // LAYER 2: Volumetric Interstellar Nebulae & Dust Lanes (Merged Theme Colors)
-      // 2a: Deep Space Cosmic Violet Nebula (Radiating organically from Andromeda)
+      // LAYER 1.5: Authentic NASA Deep Field Black Space Backdrop (JWST SMACS 0723 / Hubble)
+      if (nasaImg.complete && nasaImg.naturalWidth > 0) {
+        ctx.save();
+        // Cinematic camera parallax: shifts with scroll and mouse
+        const parallaxX = -camera.x * 0.010;
+        const parallaxY = -(camera.y * 0.010 + camera.scrollY * 0.018);
+
+        // Aspect ratio cover calculation with bleed margin for smooth parallax
+        const imgAspect = nasaImg.naturalWidth / nasaImg.naturalHeight;
+        const canvasAspect = width / height;
+        let drawW, drawH;
+
+        if (canvasAspect > imgAspect) {
+          drawW = width * 1.15;
+          drawH = drawW / imgAspect;
+        } else {
+          drawH = height * 1.15;
+          drawW = drawH * imgAspect;
+        }
+
+        const drawX = (width - drawW) * 0.5 + parallaxX;
+        const drawY = (height - drawH) * 0.5 + parallaxY;
+
+        // Render pure black space with minimal subtle NASA stars
+        ctx.globalAlpha = 0.50;
+        ctx.drawImage(nasaImg, drawX, drawY, drawW, drawH);
+        ctx.restore();
+      }
+
+      // LAYER 2: Ultra-Subtle Interstellar Starlight Ambiance (Zero cloudy haze, keeping pure black space)
+      // 2a: Faint Cosmic Violet Horizon (Organic glow near Andromeda)
       const galX = width * (isMobile ? 0.24 : 0.20) - camera.x * 0.005;
       const galY = height * (isMobile ? 0.32 : 0.26) - (camera.y * 0.005 + camera.scrollY * 0.015);
+      const nebRad1 = width * (isMobile ? 0.50 : 0.42);
 
-      const nebGrad1 = ctx.createRadialGradient(
-        galX,
-        galY,
-        15,
-        galX,
-        galY,
-        width * (isMobile ? 0.65 : 0.48)
-      );
-      nebGrad1.addColorStop(0, 'rgba(168, 85, 247, 0.16)'); // Deep cosmic violet
-      nebGrad1.addColorStop(0.35, 'rgba(126, 34, 206, 0.09)');
-      nebGrad1.addColorStop(0.70, 'rgba(30, 27, 75, 0.03)');
+      const nebGrad1 = ctx.createRadialGradient(galX, galY, 15, galX, galY, nebRad1);
+      nebGrad1.addColorStop(0, 'rgba(168, 85, 247, 0.07)');
+      nebGrad1.addColorStop(0.40, 'rgba(126, 34, 206, 0.03)');
       nebGrad1.addColorStop(1, 'transparent');
       ctx.fillStyle = nebGrad1;
-      ctx.fillRect(0, 0, width, height);
+      ctx.beginPath();
+      ctx.arc(galX, galY, nebRad1, 0, Math.PI * 2);
+      ctx.fill();
 
-      // 2b: Oxygen-III Electric Cyan Nebula (Top-Right / Saturn Sector)
-      const nebGrad2 = ctx.createRadialGradient(
-        width * 0.76 - camera.x * 0.012,
-        height * 0.28 - camera.scrollY * 0.022,
-        30,
-        width * 0.76 - camera.x * 0.012,
-        height * 0.28 - camera.scrollY * 0.022,
-        width * (isMobile ? 0.62 : 0.45)
-      );
-      nebGrad2.addColorStop(0, 'rgba(56, 189, 248, 0.10)'); // Electric cyan
-      nebGrad2.addColorStop(0.45, 'rgba(14, 116, 144, 0.06)');
-      nebGrad2.addColorStop(0.80, 'rgba(15, 23, 42, 0.03)');
+      // 2b: Faint Electric Cyan Starlight Ambiance (Near Saturn Sector)
+      const satGlowX = width * 0.76 - camera.x * 0.012;
+      const satGlowY = height * 0.28 - camera.scrollY * 0.022;
+      const nebRad2 = width * (isMobile ? 0.45 : 0.38);
+
+      const nebGrad2 = ctx.createRadialGradient(satGlowX, satGlowY, 20, satGlowX, satGlowY, nebRad2);
+      nebGrad2.addColorStop(0, 'rgba(56, 189, 248, 0.05)');
+      nebGrad2.addColorStop(0.50, 'rgba(14, 116, 144, 0.02)');
       nebGrad2.addColorStop(1, 'transparent');
       ctx.fillStyle = nebGrad2;
-      ctx.fillRect(0, 0, width, height);
-
-      // 2c: Deep Space Indigo Ambient Veil (Mid-Field Depth)
-      const nebGrad3 = ctx.createRadialGradient(
-        width * 0.50,
-        height * 0.75 - camera.scrollY * 0.025,
-        40,
-        width * 0.50,
-        height * 0.75 - camera.scrollY * 0.025,
-        width * 0.55
-      );
-      nebGrad3.addColorStop(0, 'rgba(99, 102, 241, 0.06)');
-      nebGrad3.addColorStop(0.55, 'rgba(15, 23, 42, 0.03)');
-      nebGrad3.addColorStop(1, 'transparent');
-      ctx.fillStyle = nebGrad3;
-      ctx.fillRect(0, 0, width, height);
+      ctx.beginPath();
+      ctx.arc(satGlowX, satGlowY, nebRad2, 0, Math.PI * 2);
+      ctx.fill();
 
       // =========================================================================
       // LAYER 3: Deep-Space Andromeda Galaxy (M31) - PERFECT THEME MERGE
@@ -469,89 +497,255 @@ export default function ParticleBackground() {
       // Reset composite mode
       ctx.globalCompositeOperation = 'source-over';
 
-      // LAYER 4: Deep-Field Unresolved Micro-Stars (Milky Way Stardust)
-      ctx.fillStyle = '#ffffff';
+      // Celestial Rotation Pole Apex (Off-screen high to the upper-left, like Polaris)
+      // This creates majestic parallel-like concentric curved arcs across the entire viewport
+      // with completely uniform star density and ZERO center-pinch / gathering effect!
+      const poleX = width * 0.22 - camera.x * 0.02;
+      const poleY = -height * 0.45 - (camera.y * 0.02 + camera.scrollY * 0.015);
+
+      // LAYER 4: Deep-Field Unresolved Micro-Stars (Milky Way Stardust & Warped Streamers)
+      ctx.save();
+      ctx.lineCap = 'round';
       for (let i = 0; i < microStars.length; i++) {
         const s = microStars[i];
 
-        s.x += s.vx;
-        s.y += s.vy;
-        if (s.x < 0) s.x = width;
-        else if (s.x > width) s.x = 0;
-        if (s.y < 0) s.y = height;
-        else if (s.y > height) s.y = 0;
+        // Vector relative to celestial pole
+        const dx = s.x - poleX;
+        const dy = s.y - poleY;
+        const dist = Math.hypot(dx, dy);
 
-        const px = s.x - camera.x * s.parallaxFactor;
-        const py = s.y - (camera.y * s.parallaxFactor + camera.scrollY * 0.018);
+        // Unit tangent along celestial rotation circle (clockwise)
+        const tx = -dy / dist;
+        const ty = dx / dist;
 
-        if (px < -5 || px > width + 5 || py < -5 || py > height + 5) continue;
+        // Unit radial vector (away from pole)
+        const rx = dx / dist;
+        const ry = dy / dist;
 
-        const breathe = Math.sin(simTime * s.breatheSpeed + s.breathePhase) * 0.06;
-        const alpha = Math.max(0.12, Math.min(0.70, s.alpha + breathe));
+        // Ambient subtle celestial drift (calm, perceptible cosmic motion)
+        s.x += tx * 0.052 * (1.15 - s.depth * 0.30) * dtScale;
+        s.y += ty * 0.052 * (1.15 - s.depth * 0.30) * dtScale;
 
-        ctx.globalAlpha = alpha;
-        ctx.fillRect(px, py, s.size, s.size);
+        // Dynamic scroll-driven celestial rotation motion
+        if (absV > 0.01) {
+          const speed = warpV * (1.10 + s.depth * 0.90) * s.curveVariance * dtScale;
+          s.x += tx * speed;
+          s.y += ty * speed;
+        }
+
+        // Streamline-preserving boundary wrapping (guarantees 100% uniform density across the ENTIRE viewport including center!)
+        const pad = 60;
+        if (absV > 0.01) {
+          if (signV > 0) {
+            // Scroll down: stars flow towards bottom-left; re-enter from top or right
+            if (s.x < -pad || s.y > height + pad) {
+              if (Math.random() * (width + height) < width) {
+                s.x = Math.random() * (width + pad * 2) - pad;
+                s.y = -pad;
+              } else {
+                s.x = width + pad;
+                s.y = Math.random() * (height + pad * 2) - pad;
+              }
+            }
+          } else {
+            // Scroll up: stars flow towards top-right; re-enter from bottom or left
+            if (s.x > width + pad || s.y < -pad) {
+              if (Math.random() * (width + height) < width) {
+                s.x = Math.random() * (width + pad * 2) - pad;
+                s.y = height + pad;
+              } else {
+                s.x = -pad;
+                s.y = Math.random() * (height + pad * 2) - pad;
+              }
+            }
+          }
+        } else {
+          // Ambient drift wrapping
+          if (s.x < -pad) { s.x = width + pad; s.y = Math.random() * (height + pad * 2) - pad; }
+          else if (s.x > width + pad) { s.x = -pad; s.y = Math.random() * (height + pad * 2) - pad; }
+          if (s.y > height + pad) { s.y = -pad; s.x = Math.random() * (width + pad * 2) - pad; }
+          else if (s.y < -pad) { s.y = height + pad; s.x = Math.random() * (width + pad * 2) - pad; }
+        }
+        // Safety guard against stray coordinates
+        if (s.x < -pad * 2 || s.x > width + pad * 2 || s.y < -pad * 2 || s.y > height + pad * 2) {
+          s.x = Math.random() * width;
+          s.y = Math.random() * height;
+        }
+
+        const headX = s.x - camera.x * s.parallaxFactor;
+        const headY = s.y;
+
+        if (headX < -110 || headX > width + 110 || headY < -110 || headY > height + 110) continue;
+
+        // Dynamic star reduction while scrolling: faint background micro-stars smoothly recede
+        const scrollFactor = Math.min(1.0, absV * 0.12);
+        const scrollFade = s.depth < 0.62 ? Math.max(0, 1.0 - scrollFactor * 1.5) : Math.max(0.35, 1.0 - scrollFactor * 0.35);
+
+        if (scrollFade <= 0.02) continue; // Skip rendering to reduce stars during scroll
+
+        const currentAlpha = s.alpha * scrollFade;
+        if (currentAlpha < 0.05) continue;
+
+        // Crisp, natural pinpoint star (clearly visible when idle, faint stars fade down during scroll - NO small lines/dashes)
+        ctx.beginPath();
+        ctx.arc(headX, headY, s.size, 0, Math.PI * 2);
+        ctx.fillStyle = '#e2e8f0';
+        ctx.globalAlpha = currentAlpha;
+        ctx.fill();
       }
+      ctx.restore();
 
-      // LAYER 5: Classified Stars with Hardware-Accelerated Sprite Blitting & Constellation Proximity
+      // LAYER 5: Classified Stars with Warped Light Trails & Morgan-Keenan Spectral Radiance
       const nearbyConstellationStars = [];
 
+      ctx.save();
+      ctx.lineCap = 'round';
       for (let i = 0; i < classifiedStars.length; i++) {
         const s = classifiedStars[i];
 
-        s.x += s.vx;
-        s.y += s.vy;
-        if (s.x < 0) s.x = width;
-        else if (s.x > width) s.x = 0;
-        if (s.y < 0) s.y = height;
-        else if (s.y > height) s.y = 0;
+        // Vector relative to celestial pole
+        const dx = s.x - poleX;
+        const dy = s.y - poleY;
+        const dist = Math.hypot(dx, dy);
 
-        const px = s.x - camera.x * s.parallaxFactor;
-        const py = s.y - (camera.y * s.parallaxFactor + camera.scrollY * 0.032);
+        // Unit tangent along celestial rotation circle (clockwise)
+        const tx = -dy / dist;
+        const ty = dx / dist;
 
-        if (px < -15 || px > width + 15 || py < -15 || py > height + 15) continue;
+        // Unit radial vector (away from pole)
+        const rx = dx / dist;
+        const ry = dy / dist;
 
-        let drawX = px;
-        let drawY = py;
+        // Ambient subtle celestial drift (calm, perceptible cosmic motion)
+        s.x += tx * 0.060 * (1.15 - s.depth * 0.30) * dtScale;
+        s.y += ty * 0.060 * (1.15 - s.depth * 0.30) * dtScale;
 
+        if (absV > 0.01) {
+          const speed = warpV * (1.15 + s.depth * 0.95) * s.curveVariance * dtScale;
+          s.x += tx * speed;
+          s.y += ty * speed;
+        }
+
+        // Streamline-preserving boundary wrapping (guarantees 100% uniform density across the ENTIRE viewport including center!)
+        const pad = 70;
+        if (absV > 0.01) {
+          if (signV > 0) {
+            // Scroll down: stars flow towards bottom-left; re-enter from top or right
+            if (s.x < -pad || s.y > height + pad) {
+              if (Math.random() * (width + height) < width) {
+                s.x = Math.random() * (width + pad * 2) - pad;
+                s.y = -pad;
+              } else {
+                s.x = width + pad;
+                s.y = Math.random() * (height + pad * 2) - pad;
+              }
+            }
+          } else {
+            // Scroll up: stars flow towards top-right; re-enter from bottom or left
+            if (s.x > width + pad || s.y < -pad) {
+              if (Math.random() * (width + height) < width) {
+                s.x = Math.random() * (width + pad * 2) - pad;
+                s.y = height + pad;
+              } else {
+                s.x = -pad;
+                s.y = Math.random() * (height + pad * 2) - pad;
+              }
+            }
+          }
+        } else {
+          // Ambient drift wrapping
+          if (s.x < -pad) { s.x = width + pad; s.y = Math.random() * (height + pad * 2) - pad; }
+          else if (s.x > width + pad) { s.x = -pad; s.y = Math.random() * (height + pad * 2) - pad; }
+          if (s.y > height + pad) { s.y = -pad; s.x = Math.random() * (width + pad * 2) - pad; }
+          else if (s.y < -pad) { s.y = height + pad; s.x = Math.random() * (width + pad * 2) - pad; }
+        }
+        // Safety guard against stray coordinates
+        if (s.x < -pad * 2 || s.x > width + pad * 2 || s.y < -pad * 2 || s.y > height + pad * 2) {
+          s.x = Math.random() * width;
+          s.y = Math.random() * height;
+        }
+
+        let headX = s.x - camera.x * s.parallaxFactor;
+        let headY = s.y;
+
+        // Interactive mouse deflection
         if (!isMobile && mouse.active) {
-          const dx = mouse.targetX - px;
-          const dy = mouse.targetY - py;
-          const r2 = dx * dx + dy * dy;
+          const mdx = mouse.targetX - headX;
+          const mdy = mouse.targetY - headY;
+          const r2 = mdx * mdx + mdy * mdy;
           const softening = 180 * 180;
           const deflection = (3500 * s.depth) / (r2 + softening);
-          drawX -= dx * deflection;
-          drawY -= dy * deflection;
+          headX -= mdx * deflection;
+          headY -= mdy * deflection;
 
-          // Track proximity for constellation network
-          const mDist = Math.hypot(drawX - mouse.targetX, drawY - mouse.targetY);
+          const mDist = Math.hypot(headX - mouse.targetX, headY - mouse.targetY);
           if (mDist < 165) {
-            nearbyConstellationStars.push({ ...s, drawX, drawY, mDist });
+            nearbyConstellationStars.push({ ...s, drawX: headX, drawY: headY, mDist });
           }
         }
 
-        const breathe = Math.sin(simTime * s.breatheSpeed + s.breathePhase) * 0.07;
-        const alpha = Math.max(0.25, Math.min(0.95, s.alpha + breathe));
+        if (headX < -130 || headX > width + 130 || headY < -130 || headY > height + 130) continue;
 
-        const sprite = spriteCache.starGlows[s.spectral.class];
-        if (sprite) {
-          const glowDiameter = s.radius * 6.5;
-          ctx.globalAlpha = alpha * 0.50;
-          ctx.drawImage(
-            sprite,
-            drawX - glowDiameter / 2,
-            drawY - glowDiameter / 2,
-            glowDiameter,
-            glowDiameter
-          );
+        // Dynamic star reduction while scrolling: fainter classified stars gently fade out
+        const scrollFactor = Math.min(1.0, absV * 0.10);
+        const scrollFade = s.depth < 0.42 ? Math.max(0, 1.0 - scrollFactor * 1.4) : 1.0;
+
+        if (scrollFade <= 0.02) continue; // Skip rendering to reduce stars during scroll
+
+        const baseAlpha = s.alpha * scrollFade;
+        const scrollBoost = Math.min(0.18, absV * 0.035);
+        const trailAlpha = Math.min(0.80, baseAlpha + scrollBoost);
+
+        // Prominent stars draw majestic long-exposure curved ribbons (NO tiny short lines!)
+        const canStreak = s.depth > 0.46;
+        const streakLen = canStreak ? Math.min(220, absV * (14.0 + s.depth * 16.0) * s.curveVariance) : 0;
+        const trailRamp = Math.min(1.0, Math.max(0, (streakLen - 14) / 26));
+
+        if (trailRamp > 0.01) {
+          let tailX = headX - tx * signV * streakLen;
+          let tailY = headY - ty * signV * streakLen;
+
+          // Outward geometric sagitta curvature (always bows outward away from celestial pole)
+          const sagitta = Math.min(26, (streakLen * streakLen) / (4 * Math.max(dist, 400)));
+          let midX = (headX + tailX) * 0.5 + rx * sagitta;
+          let midY = (headY + tailY) * 0.5 + ry * sagitta;
+
+          if (!isMobile && mouse.active) {
+            const mdx = mouse.targetX - headX;
+            const mdy = mouse.targetY - headY;
+            const r2 = mdx * mdx + mdy * mdy;
+            const deflection = (1800 * s.depth) / (r2 + 180 * 180);
+            tailX -= mdx * deflection;
+            tailY -= mdy * deflection;
+            midX -= mdx * deflection;
+            midY -= mdy * deflection;
+          }
+
+          // Authentic, soft, translucent curved star trail gradient (Morgan-Keenan spectral tint)
+          const grad = ctx.createLinearGradient(tailX, tailY, headX, headY);
+          grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+          grad.addColorStop(0.35, s.spectral.glow);
+          grad.addColorStop(1.0, s.spectral.color);
+
+          const streakWidth = Math.max(0.85, s.radius * 0.92);
+
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = streakWidth;
+          ctx.globalAlpha = trailAlpha * trailRamp;
+          ctx.beginPath();
+          ctx.moveTo(tailX, tailY);
+          ctx.quadraticCurveTo(midX, midY, headX, headY);
+          ctx.stroke();
         }
 
+        // Natural pinpoint star head: visible when idle, seamlessly anchoring trail tip during scroll
         ctx.beginPath();
-        ctx.arc(drawX, drawY, s.radius * 0.75, 0, Math.PI * 2);
-        ctx.fillStyle = s.spectral.core;
-        ctx.globalAlpha = alpha;
+        ctx.arc(headX, headY, s.radius * (1.0 - trailRamp * 0.18), 0, Math.PI * 2);
+        ctx.fillStyle = s.spectral.color;
+        ctx.globalAlpha = Math.min(0.90, baseAlpha + scrollBoost * 0.5);
         ctx.fill();
       }
+      ctx.restore();
 
       // =========================================================================
       // LAYER 5.5: Interactive Constellation Network & Trailing Stardust
@@ -780,53 +974,101 @@ export default function ParticleBackground() {
 
       ctx.restore(); // Restore planet translation/rotation
 
-      // LAYER 7: 2 Subtle Landmark Stars with Elegant Optical JWST Spikes
+      // LAYER 7: 2 Subtle Landmark Stars with Elegant Optical JWST Spikes & Warp Streaks
       for (let i = 0; i < landmarkStars.length; i++) {
         const s = landmarkStars[i];
-        const px = s.x - camera.x * s.parallaxFactor;
-        const py = s.y - (camera.y * s.parallaxFactor + camera.scrollY * 0.038);
 
-        if (px < -30 || px > width + 30 || py < -30 || py > height + 30) continue;
+        const dx = s.x - poleX;
+        const dy = s.y - poleY;
+        const dist = Math.hypot(dx, dy);
+        const tx = -dy / dist;
+        const ty = dx / dist;
+        const rx = dx / dist;
+        const ry = dy / dist;
 
-        ctx.save();
-        ctx.translate(px, py);
-
-        const haloGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, s.radius * 4.0);
-        haloGrad.addColorStop(0, '#ffffff');
-        haloGrad.addColorStop(0.35, s.spectral.color);
-        haloGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = haloGrad;
-        ctx.beginPath();
-        ctx.arc(0, 0, s.radius * 4.0, 0, Math.PI * 2);
-        ctx.globalAlpha = 0.50;
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(0, 0, s.radius * 0.8, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
-        ctx.globalAlpha = 0.95;
-        ctx.fill();
-
-        const angles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
-        ctx.lineWidth = 0.75;
-
-        for (const ang of angles) {
-          const endX = Math.cos(ang) * s.spikeLength;
-          const endY = Math.sin(ang) * s.spikeLength;
-
-          const spikeGrad = ctx.createLinearGradient(0, 0, endX, endY);
-          spikeGrad.addColorStop(0, '#ffffff');
-          spikeGrad.addColorStop(0.3, s.spectral.color);
-          spikeGrad.addColorStop(1, 'transparent');
-
-          ctx.beginPath();
-          ctx.moveTo(0, 0);
-          ctx.lineTo(endX, endY);
-          ctx.strokeStyle = spikeGrad;
-          ctx.globalAlpha = 0.40;
-          ctx.stroke();
+        if (absV > 0.01) {
+          const speed = warpV * 0.65 * dtScale;
+          s.x += tx * speed;
+          s.y += ty * speed;
         }
 
+        // Streamline-preserving boundary wrapping
+        const pad = 60;
+        if (absV > 0.01) {
+          if (signV > 0) {
+            if (s.x < -pad || s.y > height + pad) {
+              if (Math.random() * (width + height) < width) {
+                s.x = Math.random() * (width + pad * 2) - pad;
+                s.y = -pad;
+              } else {
+                s.x = width + pad;
+                s.y = Math.random() * (height + pad * 2) - pad;
+              }
+            }
+          } else {
+            if (s.x > width + pad || s.y < -pad) {
+              if (Math.random() * (width + height) < width) {
+                s.x = Math.random() * (width + pad * 2) - pad;
+                s.y = height + pad;
+              } else {
+                s.x = -pad;
+                s.y = Math.random() * (height + pad * 2) - pad;
+              }
+            }
+          }
+        } else {
+          if (s.x < -pad) { s.x = width + pad; s.y = Math.random() * (height + pad * 2) - pad; }
+          else if (s.x > width + pad) { s.x = -pad; s.y = Math.random() * (height + pad * 2) - pad; }
+          if (s.y > height + pad) { s.y = -pad; s.x = Math.random() * (width + pad * 2) - pad; }
+          else if (s.y < -pad) { s.y = height + pad; s.x = Math.random() * (width + pad * 2) - pad; }
+        }
+        if (s.x < -pad * 2 || s.x > width + pad * 2 || s.y < -pad * 2 || s.y > height + pad * 2) {
+          s.x = Math.random() * width;
+          s.y = Math.random() * height;
+        }
+
+        const px = s.x - camera.x * s.parallaxFactor;
+        const py = s.y;
+
+        if (px < -100 || px > width + 100 || py < -100 || py > height + 100) continue;
+
+        const baseAlpha = s.alpha;
+        const scrollBoost = Math.min(0.20, absV * 0.035);
+        const trailAlpha = Math.min(0.75, baseAlpha + scrollBoost);
+        const streakLen = Math.min(240, absV * (16.0 + s.depth * 14.0));
+        const trailRamp = Math.min(1.0, Math.max(0, (streakLen - 14) / 28));
+
+        if (trailRamp > 0.01) {
+          const tailX = px - tx * signV * streakLen;
+          const tailY = py - ty * signV * streakLen;
+          const sagitta = Math.min(28, (streakLen * streakLen) / (4 * Math.max(dist, 400)));
+          const midX = (px + tailX) * 0.5 + rx * sagitta;
+          const midY = (py + tailY) * 0.5 + ry * sagitta;
+
+          const grad = ctx.createLinearGradient(tailX, tailY, px, py);
+          grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+          grad.addColorStop(0.35, s.spectral.glow);
+          grad.addColorStop(1.0, s.spectral.color);
+
+          ctx.save();
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = Math.max(1.0, s.radius * 0.95);
+          ctx.lineCap = 'round';
+          ctx.globalAlpha = trailAlpha * trailRamp;
+          ctx.beginPath();
+          ctx.moveTo(tailX, tailY);
+          ctx.quadraticCurveTo(midX, midY, px, py);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Clean simple landmark pinpoint star
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(px, py, s.radius * (1.0 - trailRamp * 0.15), 0, Math.PI * 2);
+        ctx.fillStyle = s.spectral.color;
+        ctx.globalAlpha = Math.min(0.92, baseAlpha + scrollBoost * 0.6);
+        ctx.fill();
         ctx.restore();
       }
 
@@ -942,6 +1184,7 @@ export default function ParticleBackground() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('mouseenter', handleMouseEnter);
+      window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
@@ -962,9 +1205,10 @@ export default function ParticleBackground() {
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/80" />
         </div>
         <div className="text-[10px] text-slate-400/70 space-y-0.5">
-          <div>CELESTIAL BODIES: SATURN SYSTEM • ANDROMEDA GALAXY M31</div>
+          <div>CELESTIAL SURVEY: NASA DEEP FIELD SMACS 0723 • ANDROMEDA M31</div>
           <div>RIGHT ASCENSION (α): <span ref={raRef} className="text-purple-300 font-mono">18h 36m 56s</span></div>
           <div>DECLINATION (δ): <span ref={decRef} className="text-cyan-300 font-mono">+38° 47′ 01″</span></div>
+          <div>WARP DYNAMICS: <span ref={warpRef} className="text-emerald-400/90 font-mono">0.00 c // SUB-LIGHT CRUISE</span></div>
           <div>ORBITAL KINEMATICS: <span className="text-emerald-400 font-mono">DUAL CELESTIAL REVOLUTION</span></div>
         </div>
       </div>

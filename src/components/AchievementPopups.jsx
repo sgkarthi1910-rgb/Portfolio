@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Sparkles, CheckCircle2, X, Zap } from 'lucide-react';
 import { sound } from '../utils/sound';
@@ -40,32 +40,39 @@ const ACHIEVEMENTS = [
 
 export default function AchievementPopups() {
   const [activeToast, setActiveToast] = useState(null);
-  const [unlockedIds, setUnlockedIds] = useState(new Set());
+  const unlockedIdsRef = useRef(new Set());
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (scrollHeight <= 0) return;
-      const progress = window.scrollY / scrollHeight;
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+          if (scrollHeight > 0) {
+            const progress = window.scrollY / scrollHeight;
+            for (const ach of ACHIEVEMENTS) {
+              if (progress >= ach.threshold && !unlockedIdsRef.current.has(ach.id)) {
+                unlockedIdsRef.current.add(ach.id);
+                setActiveToast(ach);
+                sound.success();
 
-      for (const ach of ACHIEVEMENTS) {
-        if (progress >= ach.threshold && !unlockedIds.has(ach.id)) {
-          setUnlockedIds((prev) => new Set([...prev, ach.id]));
-          setActiveToast(ach);
-          sound.success();
-
-          // Auto dismiss after 4.5 seconds
-          setTimeout(() => {
-            setActiveToast((curr) => (curr?.id === ach.id ? null : curr));
-          }, 4500);
-          break;
-        }
+                // Auto dismiss after 4.5 seconds
+                setTimeout(() => {
+                  setActiveToast((curr) => (curr?.id === ach.id ? null : curr));
+                }, 4500);
+                break;
+              }
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [unlockedIds]);
+  }, []);
 
   return (
     <div className="fixed top-20 left-4 right-4 sm:left-auto sm:right-6 z-50 pointer-events-none sm:max-w-sm">

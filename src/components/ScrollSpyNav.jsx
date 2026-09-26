@@ -16,16 +16,25 @@ export default function ScrollSpyNav() {
   const [hoveredSection, setHoveredSection] = useState(null);
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) return;
+
+    let ticking = false;
     const handleScroll = () => {
-      for (const sec of SECTIONS) {
-        const el = document.getElementById(sec.id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 300 && rect.bottom >= 300) {
-            setActiveSection(sec.id);
-            break;
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          for (const sec of SECTIONS) {
+            const el = document.getElementById(sec.id);
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              if (rect.top <= 300 && rect.bottom >= 300) {
+                setActiveSection(sec.id);
+                break;
+              }
+            }
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 

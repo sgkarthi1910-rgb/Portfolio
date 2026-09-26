@@ -70,26 +70,38 @@ export default function ScrollInformationHUD() {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 640) return;
+
+    let ticking = false;
     const handleScroll = () => {
-      const sections = ['hero', 'about', 'skills', 'projects', 'experience', 'contact'];
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 250 && rect.bottom >= 250) {
-            if (currentSection !== sectionId) {
-              setCurrentSection(sectionId);
-              sound.hover();
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const sections = ['hero', 'about', 'skills', 'projects', 'experience', 'contact'];
+          for (const sectionId of sections) {
+            const el = document.getElementById(sectionId);
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              if (rect.top <= 250 && rect.bottom >= 250) {
+                setCurrentSection((prev) => {
+                  if (prev !== sectionId) {
+                    sound.hover();
+                    return sectionId;
+                  }
+                  return prev;
+                });
+                break;
+              }
             }
-            break;
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [currentSection]);
+  }, []);
 
   if (dismissed) return null;
 

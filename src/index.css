@@ -2,11 +2,26 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Desktop smooth scrolling for mouse pointers */
+  @media (hover: hover) and (pointer: fine) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Buttery native momentum scrolling on mobile touch screens */
+  @media (pointer: coarse) {
+    html {
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+    }
   }
   
   body {
